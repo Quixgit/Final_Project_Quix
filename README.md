@@ -3,52 +3,71 @@
 [![CI/CD](https://github.com/yourusername/devops-final-project/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/yourusername/devops-final-project/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Проект демонстрирует полный цикл развертывания Python-приложения в Amazon EKS с использованием:
-- **Terraform** для инфраструктуры
-- **ArgoCD** для GitOps-деплоя
-- **GitHub Actions** для CI/CD
+Проект демонстрирует полный цикл развертывания Python-приложения в Amazon EKS.
 
-## 🛠️ Структура проекта
+## Структура проекта
+
+```bash
 .
-├── .github/ # GitHub Actions workflow
-│ └── workflows/
-│ └── docker-publish.yml
-├── app/ # Исходный код приложения
-│ ├── main.py
-│ └── requirements.txt
-├── k8s-manifests/ # Kubernetes-манифесты
-│ ├── deployment.yaml
-│ ├── service.yaml
-│ └── ingress.yaml
-├── terraform/ # Инфраструктура как код
-│ ├── providers.tf
-│ ├── eks.tf
-│ ├── nginx-ingress.tf
-│ └── argocd.tf
-├── Dockerfile # Сборка Docker-образа
-├── argocd-app.yaml # Конфигурация ArgoCD Application
+├── .github/                  # GitHub Actions
+│   └── workflows/
+│       └── docker-publish.yml
+│
+├── app/                      # Исходный код
+│   ├── main.py
+│   └── requirements.txt
+│
+├── k8s-manifests/            # Kubernetes конфиги
+│   ├── deployment.yaml
+│   ├── service.yaml
+│   └── ingress.yaml
+│
+├── terraform/                # Инфраструктура
+│   ├── providers.tf
+│   ├── eks.tf
+│   ├── nginx-ingress.tf
+│   └── argocd.tf
+│
+├── Dockerfile                # Docker-образ
+├── argocd-app.yaml           # ArgoCD Application
 └── README.md
+```
 
+## Основные компоненты
+- **Terraform** - создание EKS кластера и NGINX Ingress
+- **ArgoCD** - GitOps-деплой приложения
+- **GitHub Actions** - автоматизация сборки Docker-образа
 
-## 🚀 Быстрый старт
+## Быстрый старт
+1. Сборка Docker-образа:
+```bash
+docker build -t <username>/myapp:latest .
+```
 
-### Предварительные требования
-- Аккаунты:
-  - [GitHub](https://github.com)
-  - [Docker Hub](https://hub.docker.com)
-  - [AWS](https://aws.amazon.com)
-- Установленные инструменты:
-  ```bash
-  # Terraform
-  terraform -v > terraform_1.5.7
+2. Инициализация Terraform:
+```bash
+cd terraform && terraform init
+```
 
-  # AWS CLI
-  aws --version > aws-cli/2.15.0
+3. Развертывание EKS:
+```bash
+terraform apply -auto-approve
+```
 
-  # Kubernetes tools
-  kubectl version --client
-  helm version
+4. Настройка ArgoCD:
+```bash
+kubectl apply -f ../argocd-app.yaml
+```
 
+## Настройка DNS
+1. Получить DNS Load Balancer:
+```bash
+kubectl get svc -n ingress-nginx -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}'
+```
 
-  📜 Лицензия
-Данный проект распространяется под лицензией MIT.
+2. Создать CNAME-записи для:
+- `argocd.your-domain.com`
+- `app.your-domain.com` 
+
+## Лицензия
+[MIT](LICENSE)
