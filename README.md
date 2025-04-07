@@ -1,37 +1,50 @@
-# DevOps Final Project
+# DevOps Final Project: EKS Deployment with Terraform, ArgoCD, and GitHub Actions
 
-Проект включает развертывание Python-приложения в EKS с использованием Terraform, ArgoCD и GitHub Actions.
+[![CI/CD](https://github.com/yourusername/devops-final-project/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/yourusername/devops-final-project/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Требования
+Проект демонстрирует полный цикл развертывания Python-приложения в Amazon EKS с использованием:
+- **Terraform** для инфраструктуры
+- **ArgoCD** для GitOps-деплоя
+- **GitHub Actions** для CI/CD
 
+## 🛠️ Структура проекта
+.
+├── .github/ # GitHub Actions workflow
+│ └── workflows/
+│ └── docker-publish.yml
+├── app/ # Исходный код приложения
+│ ├── main.py
+│ └── requirements.txt
+├── k8s-manifests/ # Kubernetes-манифесты
+│ ├── deployment.yaml
+│ ├── service.yaml
+│ └── ingress.yaml
+├── terraform/ # Инфраструктура как код
+│ ├── providers.tf
+│ ├── eks.tf
+│ ├── nginx-ingress.tf
+│ └── argocd.tf
+├── Dockerfile # Сборка Docker-образа
+├── argocd-app.yaml # Конфигурация ArgoCD Application
+└── README.md
+
+
+## 🚀 Быстрый старт
+
+### Предварительные требования
 - Аккаунты:
   - [GitHub](https://github.com)
   - [Docker Hub](https://hub.docker.com)
   - [AWS](https://aws.amazon.com)
 - Установленные инструменты:
-  - Terraform >= 1.5
-  - AWS CLI v2
-  - kubectl
-  - Helm
-  - Docker
+  ```bash
+  # Terraform
+  terraform -v > terraform_1.5.7
 
-## Структура проекта
-.
-├── .github/
-│ └── workflows/
-│ └── docker-publish.yml
-├── app/
-│ ├── main.py
-│ └── requirements.txt
-├── k8s-manifests/
-│ ├── deployment.yaml
-│ ├── service.yaml
-│ └── ingress.yaml
-├── terraform/
-│ ├── providers.tf
-│ ├── eks.tf
-│ ├── nginx-ingress.tf
-│ └── argocd.tf
-├── Dockerfile
-├── argocd-app.yaml
-└── README.md
+  # AWS CLI
+  aws --version > aws-cli/2.15.0
+
+  # Kubernetes tools
+  kubectl version --client
+  helm version
